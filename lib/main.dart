@@ -29,7 +29,6 @@ class FlutterWeather extends StatelessWidget {
                              text: new TextSpan(
                              style: new TextStyle(
                              fontSize: 14.0,
-                             color: Colors.black,
                             ),
                               children: <TextSpan>[
                                new TextSpan(text: 'LVIV', style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0, color: Colors.white)),
