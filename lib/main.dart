@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
+import 'package:device_info/device_info.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
@@ -91,30 +92,34 @@ class FlutterWeatherState extends State<FlutterWeather> {
       isLoading = true;
     });
 
-//    Map<String, double> locationDict;
-//
-//    try {
-//      locationDict = await location.getLocation();
-//
-//      locationError = null;
-//    } on PlatformException catch (e) {
-//      if (e.code == 'PERMISSION_DENIED') {
-//        locationError = 'Permission denied';
-//      }
-//      else if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
-//        locationError = 'Permission denied - enable location';
-//      }
-//
-//      locationDict = null;
-//    }
-//
-//    double lat = locationDict != null ? locationDict['latitude'] : 51.508530;
-//    double lon = locationDict != null ? locationDict['longitude'] : -0.076132;
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
+    IosDeviceInfo iOSInfo = await deviceInfo.iosInfo;
+    //AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
 
-    double lat =  51.508530;
-    double lon =  -0.076132;
+    bool isPhysicalDevice = iOSInfo.isPhysicalDevice;// || androidInfo.isPhysicalDevice;
 
+    Map<String, double> locationDict;
+
+    if (isPhysicalDevice) {
+      try {
+        locationDict = await location.getLocation();
+
+        locationError = null;
+      } on PlatformException catch (e) {
+        if (e.code == 'PERMISSION_DENIED') {
+          locationError = 'Permission denied';
+        }
+        else if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
+          locationError = 'Permission denied - enable location';
+        }
+
+        locationDict = null;
+      }
+    }
+
+    double lat = locationDict != null ? locationDict['latitude'] : 51.508530;
+    double lon = locationDict != null ? locationDict['longitude'] : -0.076132;
 
     final weatherResponse = await http.get(
         'https://api.openweathermap.org/data/2.5/weather?APPID=${apiKey}&lat=${lat
