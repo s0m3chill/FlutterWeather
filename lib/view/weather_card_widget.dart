@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class WeatherCardWidget extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -29,4 +30,5 @@ class WeatherCardWidget extends StatelessWidget {
       ),
     );
   }
+
 }

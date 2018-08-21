@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class WeatherWidget extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -23,4 +24,5 @@ class WeatherWidget extends StatelessWidget {
       ],
     );
   }
+
 }
