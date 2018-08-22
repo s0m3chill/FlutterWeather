@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/animation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/view/weather_widget.dart';
@@ -22,11 +23,14 @@ class FlutterWeather extends StatefulWidget {
 
 }
 
-class FlutterWeatherState extends State<FlutterWeather> {
+class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProviderStateMixin {
 
   WeatherData weatherData;
   ForecastData forecastData;
   bool isLoading = false;
+
+  Animation<double> animation;
+  AnimationController controller;
 
   Location location = new Location();
   String locationError;
@@ -38,6 +42,20 @@ class FlutterWeatherState extends State<FlutterWeather> {
     super.initState();
 
     loadWeather();
+    controller = AnimationController(
+        duration: const Duration(milliseconds: 2000), vsync: this);
+    animation = Tween(begin: 0.0, end: 450.0).animate(controller)
+      ..addListener(() {
+        setState(() {
+          // the state that has changed here is the animation object’s value
+        });
+      });
+    controller.forward();
+  }
+
+  dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -71,7 +89,7 @@ class FlutterWeatherState extends State<FlutterWeather> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
-                          height: 450.0,
+                          height: animation.value,
                           child: forecastData != null ? ListView.builder(
                               itemCount: forecastData.list.length,
                               scrollDirection: Axis.vertical,
