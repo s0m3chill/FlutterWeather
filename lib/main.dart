@@ -43,14 +43,14 @@ class FlutterWeatherState extends State<FlutterWeather> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Weather App',
+      title: 'flutter_weater',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
           backgroundColor: Colors.grey,
           appBar: AppBar(
-            title: Text('Flutter Weather App'),
+            title: Text('Weather'),
           ),
           body: Center(
               child: Column(
