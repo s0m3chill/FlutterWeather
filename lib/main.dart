@@ -43,8 +43,8 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
 
     loadWeather();
     controller = AnimationController(
-        duration: const Duration(milliseconds: 2000), vsync: this);
-    animation = Tween(begin: 0.0, end: 450.0).animate(controller)
+        duration: const Duration(milliseconds: 3000), vsync: this);
+    animation = Tween(begin: 0.0, end: 350.0).animate(controller)
       ..addListener(() {
         setState(() {
           // the state that has changed here is the animation object’s value
