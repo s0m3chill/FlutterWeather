@@ -14,7 +14,8 @@ class WeatherWidget extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Image.network('https://openweathermap.org/img/w/${weather.icon}.png'),
+        FadeInImage.assetNetwork(placeholder: '',
+            image: 'https://openweathermap.org/img/w/${weather.icon}.png'),
         Text('${weather.main}, ${weather.temp.toInt().toString()}°C', style: new TextStyle(color: Colors.white, fontSize: 30.0)),
         RichText(
           text: new TextSpan(
