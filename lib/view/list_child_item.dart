@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-class ListChildItem extends StatelessWidget {
+class ListChildItem extends ListTile {
   final String name;
 
   ListChildItem(this.name);

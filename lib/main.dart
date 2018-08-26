@@ -61,6 +61,10 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
                                     CityCoordinate(latitude: 40.0, longitude: 56.0),
                                     CityCoordinate(latitude: 40.0, longitude: 56.0)];
 
+  List<String> _searchList = List();
+  int searchCount = 0;
+
+
   CityCoordinate selectedCity;
   //
 
@@ -116,6 +120,23 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
     super.dispose();
   }
 
+//  if (_searchText.isEmpty) {
+//  return _list.map((contact) => new ListChildItem(contact))
+//      .toList();
+//  }
+//  else {
+//  List<String> _searchList = List();
+//  for (int i = 0; i < _list.length; i++) {
+//  String  name = _list.elementAt(i);
+//  if (name.toLowerCase().contains(_searchText.toLowerCase())) {
+//  _searchList.add(name);
+//  }
+//  }
+//
+//  return _searchList.map((contact) => new ListChildItem(contact))
+//      .toList();
+//  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -126,10 +147,66 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
       home: Scaffold(
           backgroundColor: Colors.grey,
           appBar: buildBar(context),
-          body: _IsSearching && !_shouldClose ? new ListView(
-            padding: new EdgeInsets.symmetric(vertical: 8.0),
-            children: _buildSearchList(),
-          ) : Center(
+          body: _IsSearching && !_shouldClose ?
+          ListView.builder(
+              itemCount: _searchList.length == 0 ? 3 : searchCount,
+              padding: const EdgeInsets.all(15.0),
+              itemBuilder: (context, position) {
+                if (_searchText.isEmpty) {
+                  return Column(
+                    children: <Widget>[
+                      Divider(height: 5.0),
+
+                      ListTile(
+                        title: Text(
+                          '${_list[position]}',
+                          style: TextStyle(
+                            fontSize: 22.0,
+                            color: Colors.deepOrangeAccent,
+                          ),
+                        ),
+                        onTap: () => _onTapItem(context, '${_list[position]}'),
+                      ),
+                    ],
+                  );
+                }
+                else {
+
+                  _searchList = [];
+                  for (int i = 0; i < _list.length; i++) {
+                    String  name = _list.elementAt(i);
+                    if (name.toLowerCase().contains(_searchText.toLowerCase())) {
+                      _searchList.add(name);
+                    }
+                  }
+
+                  searchCount = _searchList.length;
+
+                  return Column(
+                    children: <Widget>[
+                      Divider(height: 5.0),
+
+                      ListTile(
+                        title: Text(
+                          '${_searchList[position]}',
+                          style: TextStyle(
+                            fontSize: 22.0,
+                            color: Colors.deepOrangeAccent,
+                          ),
+                        ),
+                        onTap: () => _onTapItem(context, '${_searchList[position]}'),
+                      ),
+                    ],
+                  );
+                }
+              }
+
+      )
+//          new ListView(
+//            padding: new EdgeInsets.symmetric(vertical: 8.0),
+//            children: _buildSearchList(),
+//          )
+              : Center(
               child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
