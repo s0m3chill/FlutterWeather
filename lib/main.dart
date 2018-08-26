@@ -11,6 +11,7 @@ import 'package:flutter_weather/view/weather_widget.dart';
 import 'package:flutter_weather/view/weather_card_widget.dart';
 import 'package:flutter_weather/model/weather_data.dart';
 import 'package:flutter_weather/model/forecast_data.dart';
+import 'package:flutter_weather/view/list_child_item.dart';
 
 void main() => runApp(new FlutterWeather());
 
