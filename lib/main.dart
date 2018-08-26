@@ -48,7 +48,7 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
   String locationError;
 
   //
-  Widget appBarTitle = new Text("Search Sample", style: new TextStyle(color: Colors.white),);
+  Widget appBarTitle = new Text("Flutter Weather", style: new TextStyle(color: Colors.white),);
   Icon actionIcon = new Icon(Icons.search, color: Colors.white,);
   final key = new GlobalKey<ScaffoldState>();
   final TextEditingController _searchQuery = new TextEditingController();
@@ -57,9 +57,9 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
   bool _shouldClose = false;
   String _searchText = "";
 
-  List<CityCoordinate> _cityList = [CityCoordinate(latitude: 40.0, longitude: 56.0),
-                                    CityCoordinate(latitude: 40.0, longitude: 56.0),
-                                    CityCoordinate(latitude: 40.0, longitude: 56.0)];
+  List<CityCoordinate> _cityList = [CityCoordinate(latitude: 49.8383, longitude: 24.0232),
+                                    CityCoordinate(latitude: 50.4547, longitude: 30.5238),
+                                    CityCoordinate(latitude: 51.509865, longitude: -0.118092)];
 
   List<String> _searchList = List();
   int searchCount = 0;
@@ -375,6 +375,8 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
     setState(() {
       this._shouldClose = true;
       this.actionIcon = new Icon(Icons.search, color: Colors.white,);
+      this.appBarTitle =
+      new Text("Flutter Weater", style: new TextStyle(color: Colors.white),);
       _IsSearching = false;
       _searchQuery.clear();
     });
