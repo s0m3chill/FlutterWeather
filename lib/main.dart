@@ -17,6 +17,8 @@ void main() => runApp(new FlutterWeather());
 
 class FlutterWeather extends StatefulWidget {
 
+  FlutterWeather({ Key key }) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return new FlutterWeatherState();
@@ -36,11 +38,23 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
   Location location = new Location();
   String locationError;
 
+  //
+  Widget appBarTitle = new Text("Search Sample", style: new TextStyle(color: Colors.white),);
+  Icon actionIcon = new Icon(Icons.search, color: Colors.white,);
+  final key = new GlobalKey<ScaffoldState>();
+  final TextEditingController _searchQuery = new TextEditingController();
+  List<String> _list;
+  bool _IsSearching = false;
+  bool _shouldClose = false;
+  String _searchText = "";
+  //
+
   String apiKey = 'd276ce21f21e137bff355f4639e2d02d';
 
   @override
   void initState() {
     super.initState();
+
 
     loadWeather();
     controller = AnimationController(
@@ -52,6 +66,42 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
         });
       });
     controller.forward();
+
+    _list = List();
+    _list.add("Google");
+    _list.add("IOS");
+    _list.add("Andorid");
+    _list.add("Dart");
+    _list.add("Flutter");
+    _list.add("Python");
+    _list.add("React");
+    _list.add("Xamarin");
+    _list.add("Kotlin");
+    _list.add("Java");
+    _list.add("RxAndroid");
+
+    if (this._shouldClose == true) {
+      _IsSearching = false;
+      //_shouldClose = false;
+      _searchText = "";
+    }
+    else {
+      this._shouldClose = false;
+      _searchQuery.addListener(() {
+//      if (_searchQuery.text.isEmpty) {
+//        setState(() {
+//          _IsSearching = false;
+//          _searchText = "";
+//        });
+//      }
+//      else {
+        setState(() {
+          _IsSearching = true;
+          _searchText = _searchQuery.text;
+        });
+        //    }
+      });
+    }
   }
 
   dispose() {
@@ -68,10 +118,11 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
       ),
       home: Scaffold(
           backgroundColor: Colors.grey,
-          appBar: AppBar(
-            title: Text('Weather'),
-          ),
-          body: Center(
+          appBar: buildBar(context),
+          body: _IsSearching && !_shouldClose ? new ListView(
+            padding: new EdgeInsets.symmetric(vertical: 8.0),
+            children: _buildSearchList(),
+          ) : Center(
               child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
@@ -160,6 +211,79 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
 
     setState(() {
       isLoading = false;
+    });
+  }
+
+
+  // List actions
+  List<ListChildItem> _buildSearchList() {
+    if (_searchText.isEmpty) {
+      return _list.map((contact) => new ListChildItem(contact))
+          .toList();
+    }
+    else {
+      List<String> _searchList = List();
+      for (int i = 0; i < _list.length; i++) {
+        String  name = _list.elementAt(i);
+        if (name.toLowerCase().contains(_searchText.toLowerCase())) {
+          _searchList.add(name);
+        }
+      }
+      return _searchList.map((contact) => new ListChildItem(contact))
+          .toList();
+    }
+  }
+
+  // SearchBar
+
+  Widget buildBar(BuildContext context) {
+    return new AppBar(
+        centerTitle: true,
+        title: appBarTitle,
+        actions: <Widget>[
+          new IconButton(icon: actionIcon, onPressed: () {
+            setState(() {
+              if (this.actionIcon.icon == Icons.search) {
+                this.actionIcon = new Icon(Icons.close, color: Colors.white,);
+                this.appBarTitle = new TextField(
+                  controller: _searchQuery,
+                  style: new TextStyle(
+                    color: Colors.white,
+
+                  ),
+                  decoration: new InputDecoration(
+                      prefixIcon: new Icon(Icons.search, color: Colors.white),
+                      hintText: "Search...",
+                      hintStyle: new TextStyle(color: Colors.white)
+                  ),
+                );
+                _handleSearchStart();
+              }
+              else {
+                _handleSearchEnd();
+              }
+            });
+          },),
+        ]
+    );
+  }
+
+  // Actions
+
+  void _handleSearchStart() {
+    setState(() {
+      _IsSearching = true;
+    });
+  }
+
+  void _handleSearchEnd() {
+    setState(() {
+      this._shouldClose = true;
+      this.actionIcon = new Icon(Icons.search, color: Colors.white,);
+      this.appBarTitle =
+      new Text("Search Sample", style: new TextStyle(color: Colors.white),);
+      _IsSearching = false;
+      _searchQuery.clear();
     });
   }
 
