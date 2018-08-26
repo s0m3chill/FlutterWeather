@@ -26,6 +26,15 @@ class FlutterWeather extends StatefulWidget {
 
 }
 
+class CityCoordinate {
+
+  final double latitude;
+  final double longitude;
+
+  CityCoordinate({this.latitude, this.longitude});
+
+}
+
 class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProviderStateMixin {
 
   WeatherData weatherData;
@@ -47,6 +56,12 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
   bool _IsSearching = false;
   bool _shouldClose = false;
   String _searchText = "";
+
+  List<CityCoordinate> _cityList = [CityCoordinate(latitude: 40.0, longitude: 56.0),
+                                    CityCoordinate(latitude: 40.0, longitude: 56.0),
+                                    CityCoordinate(latitude: 40.0, longitude: 56.0)];
+
+  CityCoordinate selectedCity;
   //
 
   String apiKey = 'd276ce21f21e137bff355f4639e2d02d';
@@ -68,17 +83,9 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
     controller.forward();
 
     _list = List();
-    _list.add("Google");
-    _list.add("IOS");
-    _list.add("Andorid");
-    _list.add("Dart");
-    _list.add("Flutter");
-    _list.add("Python");
-    _list.add("React");
-    _list.add("Xamarin");
-    _list.add("Kotlin");
-    _list.add("Java");
-    _list.add("RxAndroid");
+    _list.add("Lviv");
+    _list.add("Kyiv");
+    _list.add("London");
 
     if (this._shouldClose == true) {
       _IsSearching = false;
@@ -157,6 +164,16 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
     );
   }
 
+  void _onTapItem(BuildContext context, String name) {
+    Navigator.of(context).push(
+      new MaterialPageRoute<void>(
+        builder: (BuildContext context) {
+
+        },
+      ),
+    );
+  }
+
   loadWeather() async {
     setState(() {
       isLoading = true;
@@ -229,6 +246,7 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
           _searchList.add(name);
         }
       }
+
       return _searchList.map((contact) => new ListChildItem(contact))
           .toList();
     }
@@ -280,8 +298,6 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
     setState(() {
       this._shouldClose = true;
       this.actionIcon = new Icon(Icons.search, color: Colors.white,);
-      this.appBarTitle =
-      new Text("Search Sample", style: new TextStyle(color: Colors.white),);
       _IsSearching = false;
       _searchQuery.clear();
     });
