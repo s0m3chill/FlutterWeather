@@ -87,14 +87,14 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
-          backgroundColor: _isSearching && !_shouldClose ? Colors.white : Colors.grey,
+          backgroundColor: _shouldShowCities() ? Colors.white : Colors.grey,
           appBar: buildBar(context),
           body: _isLoading ? new Container(constraints: BoxConstraints.expand(), child:
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[CircularProgressIndicator()],)
-          ) : _isSearching && !_shouldClose ?
+          ) : _shouldShowCities() ?
           ListView.builder(
               itemCount: cities.length,
               padding: const EdgeInsets.all(15.0),
@@ -116,19 +116,7 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
                   );
                 }
                 else {
-                  _searchList = [];
-                  for (int i = 0; i < _list.length; i++) {
-                    String  name = _list.elementAt(i);
-                    if (name.toLowerCase().contains(_searchText.toLowerCase())) {
-                      _searchList.add(name);
-                    } else {
-                      _searchList.add("");
-                    }
-                  }
-
-                  _searchList.sort((a, b) {
-                    return b.compareTo(a);
-                  });
+                  prepareSearchList();
 
                   return Column(
                     children: <Widget>[
@@ -201,8 +189,7 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
           'https://api.openweathermap.org/data/2.5/forecast?APPID=${WeatherApi.apiKey}&lat=${lat
               .toString()}&lon=${lon.toString()}&units=metric');
 
-      if (weatherResponse.statusCode == 200 &&
-          forecastResponse.statusCode == 200) {
+      if (weatherResponse.statusCode == 200 && forecastResponse.statusCode == 200) {
         return setState(() {
           _weatherData =
           new WeatherData.fromJson(jsonDecode(weatherResponse.body));
@@ -215,6 +202,26 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
       setState(() {
         _isLoading = false;
       });
+    });
+  }
+
+  bool _shouldShowCities() {
+    return _isSearching && !_shouldClose;
+  }
+
+  void prepareSearchList() {
+    _searchList = [];
+    for (int i = 0; i < _list.length; i++) {
+      String  name = _list.elementAt(i);
+      if (name.toLowerCase().contains(_searchText.toLowerCase())) {
+        _searchList.add(name);
+      } else {
+        _searchList.add("");
+      }
+    }
+
+    _searchList.sort((a, b) {
+      return b.compareTo(a);
     });
   }
 
