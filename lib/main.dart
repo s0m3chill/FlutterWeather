@@ -2,8 +2,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/animation.dart';
-
 import 'package:flutter/material.dart';
+
 import 'package:flutter_weather/utils/device_location_manager.dart';
 import 'package:flutter_weather/view/weather_widget.dart';
 import 'package:flutter_weather/view/weather_card_widget.dart';
@@ -36,8 +36,9 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
   AnimationController controller;
 
   //
-  Widget appBarTitle = new Text("Flutter Weather", style: new TextStyle(color: Colors.white),);
-  Icon actionIcon = new Icon(Icons.search, color: Colors.white,);
+  Widget appBarTitle;
+  Widget _defaultAppBar = new Text("Flutter Weather", style: new TextStyle(color: Colors.white));
+  Icon actionIcon = new Icon(Icons.search, color: Colors.white);
   final key = new GlobalKey<ScaffoldState>();
   final TextEditingController _searchQuery = new TextEditingController();
   List<String> _list;
@@ -46,8 +47,6 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
   String _searchText = "";
 
   List<String> _searchList = List();
-  int searchCount = 0;
-
 
   CityCoordinate selectedCity = null;
 
@@ -55,6 +54,8 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
   @override
   void initState() {
     super.initState();
+
+    appBarTitle = _defaultAppBar;
 
     loadWeather();
     controller = AnimationController(
@@ -136,8 +137,6 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
                   _searchList.sort((a, b) {
                     return b.compareTo(a);
                   });
-
-                  searchCount = _searchList.length;
 
                   return Column(
                     children: <Widget>[
@@ -236,7 +235,7 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
     });
   }
 
-  // SearchBar
+  // MARK: - SearchBar
 
   Widget buildBar(BuildContext context) {
     return new AppBar(
@@ -270,8 +269,6 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
     );
   }
 
-  // Actions
-
   void _handleSearchStart() {
     setState(() {
       _isSearching = true;
@@ -281,9 +278,8 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
   void _handleSearchEnd() {
     setState(() {
       this._shouldClose = true;
-      this.actionIcon = new Icon(Icons.search, color: Colors.white,);
-      this.appBarTitle =
-      new Text("Flutter Weater", style: new TextStyle(color: Colors.white),);
+      this.actionIcon = new Icon(Icons.search, color: Colors.white);
+      this.appBarTitle = _defaultAppBar;
       _isSearching = false;
       _searchQuery.clear();
     });
