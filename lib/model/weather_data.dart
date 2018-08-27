@@ -1,5 +1,9 @@
 library flutter_weather.model.weather_data;
 
+class WeatherApi {
+  static String apiKey = 'd276ce21f21e137bff355f4639e2d02d';
+}
+
 class WeatherData {
 
   final DateTime date;
