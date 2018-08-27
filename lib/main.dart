@@ -35,7 +35,6 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
   Animation<double> animation;
   AnimationController controller;
 
-  //
   Widget appBarTitle;
   Widget _defaultAppBar = new Text("Flutter Weather", style: new TextStyle(color: Colors.white));
   Icon actionIcon = new Icon(Icons.search, color: Colors.white);
@@ -48,8 +47,7 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
 
   List<String> _searchList = List();
 
-  CityCoordinate selectedCity = null;
-
+  CityCoordinate selectedCity;
 
   @override
   void initState() {
@@ -57,7 +55,7 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
 
     appBarTitle = _defaultAppBar;
 
-    loadWeather();
+    _loadWeather();
     controller = AnimationController(
         duration: const Duration(milliseconds: 3000), vsync: this);
     animation = Tween(begin: 0.0, end: 350.0).animate(controller)
@@ -98,24 +96,22 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
-          backgroundColor: Colors.grey,
+          backgroundColor: _isSearching && !_shouldClose ? Colors.white : Colors.grey,
           appBar: buildBar(context),
           body: _isSearching && !_shouldClose ?
           ListView.builder(
-              itemCount: 3,
+              itemCount: cities.length,
               padding: const EdgeInsets.all(15.0),
               itemBuilder: (context, position) {
                 if (_searchText.isEmpty) {
                   return Column(
                     children: <Widget>[
-                      Divider(height: 5.0),
-
                       ListTile(
                         title: Text(
                           '${_list[position]}',
                           style: TextStyle(
                             fontSize: 22.0,
-                            color: Colors.deepOrangeAccent,
+                            color: Colors.black,
                           ),
                         ),
                         onTap: () => _onTapItem(context, '${_list[position]}'),
@@ -140,14 +136,12 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
 
                   return Column(
                     children: <Widget>[
-                      Divider(height: 5.0),
-
                       ListTile(
                         title: Text(
                           '${_searchList[position]}',
                           style: TextStyle(
                             fontSize: 22.0,
-                            color: Colors.deepOrangeAccent,
+                            color: Colors.black,
                           ),
                         ),
                         onTap: () => _onTapItem(context, '${_searchList[position]}'),
@@ -195,10 +189,10 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
     selectedCity = cityCoordinates[name];
 
     _handleSearchEnd();
-    loadWeather();
+    _loadWeather();
   }
 
-  loadWeather() async {
+  _loadWeather() async {
     setState(() {
       isLoading = true;
     });
