@@ -11,16 +11,15 @@ class DeviceLocationManager {
   String _locationError;
 
   Future<Map<String, double>> fetchDeviceLocation() async {
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+//    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+//
+//    IosDeviceInfo iOSInfo = await deviceInfo.iosInfo;
+//    //AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+//
+//    bool isPhysicalDevice = iOSInfo.isPhysicalDevice;// || androidInfo.isPhysicalDevice;
 
-    IosDeviceInfo iOSInfo = await deviceInfo.iosInfo;
-    //AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-
-    bool isPhysicalDevice = iOSInfo.isPhysicalDevice;// || androidInfo.isPhysicalDevice;
-
-    if (isPhysicalDevice) {
       try {
-        locationDict = await _location.getLocation();
+        locationDict = await _location.getLocation().timeout(const Duration (seconds: 2), onTimeout : () => _onUnknownLocation());
 
         _locationError = null;
       } on PlatformException catch (e) {
@@ -35,8 +34,9 @@ class DeviceLocationManager {
       }
 
       return locationDict;
-    }
+  }
 
+  Map<String, double> _onUnknownLocation() {
     return null;
   }
 
