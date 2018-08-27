@@ -16,8 +16,6 @@ void main() => runApp(new FlutterWeather());
 
 class FlutterWeather extends StatefulWidget {
 
-  FlutterWeather({ Key key }) : super(key: key);
-
   @override
   State<StatefulWidget> createState() {
     return new FlutterWeatherState();
@@ -28,43 +26,43 @@ class FlutterWeather extends StatefulWidget {
 
 class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProviderStateMixin {
 
-  WeatherData weatherData;
-  ForecastData forecastData;
-  bool isLoading = false;
+  // MARK: - Properties
+  WeatherData _weatherData;
+  ForecastData _forecastData;
+  bool _isLoading = false;
 
-  Animation<double> animation;
-  AnimationController controller;
+  Animation<double> _animation;
+  AnimationController _animationController;
 
-  Widget appBarTitle;
+  Widget _appBarTitle;
   Widget _defaultAppBar = new Text("Flutter Weather", style: new TextStyle(color: Colors.white));
-  Icon actionIcon = new Icon(Icons.search, color: Colors.white);
-  final key = new GlobalKey<ScaffoldState>();
+  Icon _actionIcon = new Icon(Icons.search, color: Colors.white);
   final TextEditingController _searchQuery = new TextEditingController();
+
   List<String> _list;
   bool _isSearching = false;
   bool _shouldClose = false;
   String _searchText = "";
-
   List<String> _searchList = List();
+  CityCoordinate _selectedCity;
 
-  CityCoordinate selectedCity;
-
+  // MARK: - Initialization
   @override
   void initState() {
     super.initState();
 
-    appBarTitle = _defaultAppBar;
+    _appBarTitle = _defaultAppBar;
 
     _loadWeather();
-    controller = AnimationController(
+    _animationController = AnimationController(
         duration: const Duration(milliseconds: 3000), vsync: this);
-    animation = Tween(begin: 0.0, end: 350.0).animate(controller)
+    _animation = Tween(begin: 0.0, end: 350.0).animate(_animationController)
       ..addListener(() {
         setState(() {
           // the state that has changed here is the animation object’s value
         });
       });
-    controller.forward();
+    _animationController.forward();
 
     _list = cities;
 
@@ -84,10 +82,11 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
   }
 
   dispose() {
-    controller.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
+  // MARK: - Setup
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -160,7 +159,7 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
                         children: <Widget>[
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: weatherData != null ? WeatherWidget(weather: weatherData) : Container(),
+                            child: _weatherData != null ? WeatherWidget(weather: _weatherData) : Container(),
                           ),
                         ],
                       ),
@@ -169,12 +168,12 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
-                          height: animation.value,
-                          child: forecastData != null ? ListView.builder(
-                              itemCount: forecastData.list.length,
+                          height: _animation.value,
+                          child: _forecastData != null ? ListView.builder(
+                              itemCount: _forecastData.list.length,
                               scrollDirection: Axis.vertical,
                               itemBuilder: (context, index) =>
-                                  WeatherCardWidget(weather: forecastData.list.elementAt(index))) : Container(),
+                                  WeatherCardWidget(weather: _forecastData.list.elementAt(index))) : Container(),
                         ),
                       ),
                     )
@@ -185,16 +184,9 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
     );
   }
 
-  void _onTapItem(BuildContext context, String name) {
-    selectedCity = cityCoordinates[name];
-
-    _handleSearchEnd();
-    _loadWeather();
-  }
-
   _loadWeather() async {
     setState(() {
-      isLoading = true;
+      _isLoading = true;
     });
 
     DeviceLocationManager deviceLocationManager = DeviceLocationManager();
@@ -202,8 +194,8 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
     deviceLocationManager.fetchDeviceLocation().then((dict) async {
       Map<String, double> locationDict = deviceLocationManager.locationDict;
 
-      double lat = selectedCity != null ? selectedCity.latitude : locationDict != null ? locationDict['latitude'] : 48.864716;
-      double lon = selectedCity != null ? selectedCity.longitude : locationDict != null ? locationDict['longitude'] : 2.349014;
+      double lat = _selectedCity != null ? _selectedCity.latitude : locationDict != null ? locationDict['latitude'] : 48.864716;
+      double lon = _selectedCity != null ? _selectedCity.longitude : locationDict != null ? locationDict['longitude'] : 2.349014;
 
       final weatherResponse = await http.get(
           'https://api.openweathermap.org/data/2.5/weather?APPID=${WeatherApi.apiKey}&lat=${lat
@@ -215,32 +207,39 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
       if (weatherResponse.statusCode == 200 &&
           forecastResponse.statusCode == 200) {
         return setState(() {
-          weatherData =
+          _weatherData =
           new WeatherData.fromJson(jsonDecode(weatherResponse.body));
-          forecastData =
+          _forecastData =
           new ForecastData.fromJson(jsonDecode(forecastResponse.body));
-          isLoading = false;
+          _isLoading = false;
         });
       }
 
       setState(() {
-        isLoading = false;
+        _isLoading = false;
       });
     });
   }
 
-  // MARK: - SearchBar
+  // MARK: - Actions
+  void _onTapItem(BuildContext context, String name) {
+    _selectedCity = cityCoordinates[name];
 
+    _handleSearchEnd();
+    _loadWeather();
+  }
+
+  // MARK: - SearchBar
   Widget buildBar(BuildContext context) {
     return new AppBar(
         centerTitle: true,
-        title: appBarTitle,
+        title: _appBarTitle,
         actions: <Widget>[
-          new IconButton(icon: actionIcon, onPressed: () {
+          new IconButton(icon: _actionIcon, onPressed: () {
             setState(() {
-              if (this.actionIcon.icon == Icons.search) {
-                this.actionIcon = new Icon(Icons.close, color: Colors.white,);
-                this.appBarTitle = new TextField(
+              if (this._actionIcon.icon == Icons.search) {
+                this._actionIcon = new Icon(Icons.close, color: Colors.white,);
+                this._appBarTitle = new TextField(
                   controller: _searchQuery,
                   style: new TextStyle(
                     color: Colors.white,
@@ -272,8 +271,8 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
   void _handleSearchEnd() {
     setState(() {
       this._shouldClose = true;
-      this.actionIcon = new Icon(Icons.search, color: Colors.white);
-      this.appBarTitle = _defaultAppBar;
+      this._actionIcon = new Icon(Icons.search, color: Colors.white);
+      this._appBarTitle = _defaultAppBar;
       _isSearching = false;
       _searchQuery.clear();
     });
