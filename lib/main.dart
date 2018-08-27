@@ -1,19 +1,16 @@
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:location/location.dart';
-import 'package:device_info/device_info.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/animation.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_weather/utils/device_location_manager.dart';
 import 'package:flutter_weather/view/weather_widget.dart';
 import 'package:flutter_weather/view/weather_card_widget.dart';
 import 'package:flutter_weather/model/weather_data.dart';
 import 'package:flutter_weather/model/forecast_data.dart';
 import 'package:flutter_weather/model/city_coordinate.dart';
 import 'package:flutter_weather/model/city_datasource.dart';
-import 'package:flutter_weather/view/list_child_item.dart';
 
 void main() => runApp(new FlutterWeather());
 
@@ -37,9 +34,6 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
 
   Animation<double> animation;
   AnimationController controller;
-
-  Location location = new Location();
-  String locationError;
 
   //
   Widget appBarTitle = new Text("Flutter Weather", style: new TextStyle(color: Colors.white),);
@@ -210,55 +204,35 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
       isLoading = true;
     });
 
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    DeviceLocationManager deviceLocationManager = DeviceLocationManager();
 
-    IosDeviceInfo iOSInfo = await deviceInfo.iosInfo;
-    //AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    deviceLocationManager.fetchDeviceLocation().then((dict) async {
+      Map<String, double> locationDict = deviceLocationManager.locationDict;
 
-    bool isPhysicalDevice = iOSInfo.isPhysicalDevice;// || androidInfo.isPhysicalDevice;
+      double lat = selectedCity != null ? selectedCity.latitude : locationDict != null ? locationDict['latitude'] : 48.864716;
+      double lon = selectedCity != null ? selectedCity.longitude : locationDict != null ? locationDict['longitude'] : 2.349014;
 
-    Map<String, double> locationDict;
+      final weatherResponse = await http.get(
+          'https://api.openweathermap.org/data/2.5/weather?APPID=${WeatherApi.apiKey}&lat=${lat
+              .toString()}&lon=${lon.toString()}&units=metric');
+      final forecastResponse = await http.get(
+          'https://api.openweathermap.org/data/2.5/forecast?APPID=${WeatherApi.apiKey}&lat=${lat
+              .toString()}&lon=${lon.toString()}&units=metric');
 
-    if (isPhysicalDevice) {
-      try {
-        locationDict = await location.getLocation();
-
-        locationError = null;
-      } on PlatformException catch (e) {
-        if (e.code == 'PERMISSION_DENIED') {
-          locationError = 'Permission denied';
-        }
-        else if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
-          locationError = 'Permission denied - enable location';
-        }
-
-        locationDict = null;
-      }
-    }
-
-    double lat = selectedCity != null ? selectedCity.latitude : locationDict != null ? locationDict['latitude'] : 48.864716;
-    double lon = selectedCity != null ? selectedCity.longitude : locationDict != null ? locationDict['longitude'] : 2.349014;
-
-    final weatherResponse = await http.get(
-        'https://api.openweathermap.org/data/2.5/weather?APPID=${WeatherApi.apiKey}&lat=${lat
-            .toString()}&lon=${lon.toString()}&units=metric');
-    final forecastResponse = await http.get(
-        'https://api.openweathermap.org/data/2.5/forecast?APPID=${WeatherApi.apiKey}&lat=${lat
-            .toString()}&lon=${lon.toString()}&units=metric');
-
-    if (weatherResponse.statusCode == 200 &&
-        forecastResponse.statusCode == 200) {
-      return setState(() {
-        weatherData =
-        new WeatherData.fromJson(jsonDecode(weatherResponse.body));
-        forecastData =
+      if (weatherResponse.statusCode == 200 &&
+          forecastResponse.statusCode == 200) {
+        return setState(() {
+          weatherData =
+          new WeatherData.fromJson(jsonDecode(weatherResponse.body));
+          forecastData =
           new ForecastData.fromJson(jsonDecode(forecastResponse.body));
+          isLoading = false;
+        });
+      }
+
+      setState(() {
         isLoading = false;
       });
-    }
-
-    setState(() {
-      isLoading = false;
     });
   }
 
