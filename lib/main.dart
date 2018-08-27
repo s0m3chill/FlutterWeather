@@ -61,11 +61,15 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
                                     CityCoordinate(latitude: 50.4547, longitude: 30.5238),
                                     CityCoordinate(latitude: 51.509865, longitude: -0.118092)];
 
+  Map<String, CityCoordinate> cities = {"Lviv": CityCoordinate(latitude: 49.8383, longitude: 24.0232),
+                                        "Kyiv": CityCoordinate(latitude: 50.4547, longitude: 30.5238),
+                                        "London": CityCoordinate(latitude: 51.509865, longitude: -0.118092)};
+
   List<String> _searchList = List();
   int searchCount = 0;
 
 
-  CityCoordinate selectedCity;
+  CityCoordinate selectedCity = null;
   //
 
   String apiKey = 'd276ce21f21e137bff355f4639e2d02d';
@@ -73,7 +77,6 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
   @override
   void initState() {
     super.initState();
-
 
     loadWeather();
     controller = AnimationController(
@@ -250,6 +253,10 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
     String ggg = name;
     print(ggg);
 
+    selectedCity = cities[name];
+
+    _handleSearchEnd();
+    loadWeather();
   }
 
   loadWeather() async {
@@ -283,8 +290,8 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
       }
     }
 
-    double lat = locationDict != null ? locationDict['latitude'] : 51.508530;
-    double lon = locationDict != null ? locationDict['longitude'] : -0.076132;
+    double lat = locationDict != null ? locationDict['latitude'] : selectedCity != null ? selectedCity.latitude : 48.864716;
+    double lon = locationDict != null ? locationDict['longitude'] : selectedCity != null ? selectedCity.longitude : 2.349014;
 
     final weatherResponse = await http.get(
         'https://api.openweathermap.org/data/2.5/weather?APPID=${apiKey}&lat=${lat
