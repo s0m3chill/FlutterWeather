@@ -236,8 +236,8 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
       }
     }
 
-    double lat = locationDict != null ? locationDict['latitude'] : selectedCity != null ? selectedCity.latitude : 48.864716;
-    double lon = locationDict != null ? locationDict['longitude'] : selectedCity != null ? selectedCity.longitude : 2.349014;
+    double lat = selectedCity != null ? selectedCity.latitude : locationDict != null ? locationDict['latitude'] : 48.864716;
+    double lon = selectedCity != null ? selectedCity.longitude : locationDict != null ? locationDict['longitude'] : 2.349014;
 
     final weatherResponse = await http.get(
         'https://api.openweathermap.org/data/2.5/weather?APPID=${WeatherApi.apiKey}&lat=${lat
