@@ -65,19 +65,12 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
 
     _list = cities;
 
-    if (_shouldClose == true) {
-      _isSearching = false;
-      _searchText = "";
-    }
-    else {
-      _shouldClose = false;
-      _searchQuery.addListener(() {
-        setState(() {
-          _isSearching = true;
-          _searchText = _searchQuery.text;
+    _searchQuery.addListener(() {
+      setState(() {
+        _isSearching = true;
+        _searchText = _searchQuery.text;
         });
-      });
-    }
+    });
   }
 
   dispose() {
