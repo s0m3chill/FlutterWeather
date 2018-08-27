@@ -149,7 +149,7 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
           appBar: buildBar(context),
           body: _IsSearching && !_shouldClose ?
           ListView.builder(
-              itemCount: _searchList.length == 0 ? 3 : searchCount,
+              itemCount: 3,//_searchList.length == 0 ? 3 : searchCount,
               padding: const EdgeInsets.all(15.0),
               itemBuilder: (context, position) {
                 if (_searchText.isEmpty) {
@@ -171,14 +171,19 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
                   );
                 }
                 else {
-
                   _searchList = [];
                   for (int i = 0; i < _list.length; i++) {
                     String  name = _list.elementAt(i);
                     if (name.toLowerCase().contains(_searchText.toLowerCase())) {
                       _searchList.add(name);
+                    } else {
+                      _searchList.add("");
                     }
                   }
+
+                  _searchList.sort((a, b) {
+                    return b.compareTo(a);
+                  });
 
                   searchCount = _searchList.length;
 
@@ -242,13 +247,9 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
   }
 
   void _onTapItem(BuildContext context, String name) {
-    Navigator.of(context).push(
-      new MaterialPageRoute<void>(
-        builder: (BuildContext context) {
+    String ggg = name;
+    print(ggg);
 
-        },
-      ),
-    );
   }
 
   loadWeather() async {
