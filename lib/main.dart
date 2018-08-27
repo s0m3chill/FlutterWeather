@@ -40,7 +40,7 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
 
   List<String> _list;
   bool _isSearching = false;
-  bool _shouldClose = false;
+  bool _isCitiesVisible = false;
   String _searchText = "";
   List<String> _searchList = List();
   CityCoordinate _selectedCity;
@@ -177,10 +177,8 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
     DeviceLocationManager deviceLocationManager = DeviceLocationManager();
 
     deviceLocationManager.fetchDeviceLocation().then((dict) async {
-      Map<String, double> locationDict = deviceLocationManager.locationDict;
-
-      double lat = _selectedCity != null ? _selectedCity.latitude : locationDict != null ? locationDict['latitude'] : 48.864716;
-      double lon = _selectedCity != null ? _selectedCity.longitude : locationDict != null ? locationDict['longitude'] : 2.349014;
+      double lat = _selectedCity != null ? _selectedCity.latitude : dict != null ? dict['latitude'] : 48.864716;
+      double lon = _selectedCity != null ? _selectedCity.longitude : dict != null ? dict['longitude'] : 2.349014;
 
       final weatherResponse = await http.get(
           'https://api.openweathermap.org/data/2.5/weather?APPID=${WeatherApi.apiKey}&lat=${lat
@@ -206,7 +204,7 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
   }
 
   bool _shouldShowCities() {
-    return _isSearching && !_shouldClose;
+    return _isSearching && !_isCitiesVisible;
   }
 
   void prepareSearchList() {
@@ -269,12 +267,13 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
   void _handleSearchStart() {
     setState(() {
       _isSearching = true;
+      _isCitiesVisible = false;
     });
   }
 
   void _handleSearchEnd() {
     setState(() {
-      _shouldClose = true;
+      _isCitiesVisible = true;
       _actionIcon = new Icon(Icons.search, color: Colors.white);
       _appBarTitle = _defaultAppBar;
       _isSearching = false;
