@@ -23,7 +23,6 @@ class FlutterWeather extends StatefulWidget {
 
 }
 
-
 class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProviderStateMixin {
 
   // MARK: - Properties
@@ -66,12 +65,12 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
 
     _list = cities;
 
-    if (this._shouldClose == true) {
+    if (_shouldClose == true) {
       _isSearching = false;
       _searchText = "";
     }
     else {
-      this._shouldClose = false;
+      _shouldClose = false;
       _searchQuery.addListener(() {
         setState(() {
           _isSearching = true;
@@ -97,7 +96,12 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
       home: Scaffold(
           backgroundColor: _isSearching && !_shouldClose ? Colors.white : Colors.grey,
           appBar: buildBar(context),
-          body: _isSearching && !_shouldClose ?
+          body: _isLoading ? new Container(constraints: BoxConstraints.expand(), child:
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[CircularProgressIndicator()],)
+          ) : _isSearching && !_shouldClose ?
           ListView.builder(
               itemCount: cities.length,
               padding: const EdgeInsets.all(15.0),
@@ -237,9 +241,9 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
         actions: <Widget>[
           new IconButton(icon: _actionIcon, onPressed: () {
             setState(() {
-              if (this._actionIcon.icon == Icons.search) {
-                this._actionIcon = new Icon(Icons.close, color: Colors.white,);
-                this._appBarTitle = new TextField(
+              if (_actionIcon.icon == Icons.search) {
+                _actionIcon = new Icon(Icons.close, color: Colors.white,);
+                _appBarTitle = new TextField(
                   controller: _searchQuery,
                   style: new TextStyle(
                     color: Colors.white,
@@ -270,9 +274,9 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
 
   void _handleSearchEnd() {
     setState(() {
-      this._shouldClose = true;
-      this._actionIcon = new Icon(Icons.search, color: Colors.white);
-      this._appBarTitle = _defaultAppBar;
+      _shouldClose = true;
+      _actionIcon = new Icon(Icons.search, color: Colors.white);
+      _appBarTitle = _defaultAppBar;
       _isSearching = false;
       _searchQuery.clear();
     });
