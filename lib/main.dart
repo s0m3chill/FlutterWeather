@@ -57,9 +57,6 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
   bool _shouldClose = false;
   String _searchText = "";
 
-  List<CityCoordinate> _cityList = [CityCoordinate(latitude: 49.8383, longitude: 24.0232),
-                                    CityCoordinate(latitude: 50.4547, longitude: 30.5238),
-                                    CityCoordinate(latitude: 51.509865, longitude: -0.118092)];
 
   Map<String, CityCoordinate> cities = {"Lviv": CityCoordinate(latitude: 49.8383, longitude: 24.0232),
                                         "Kyiv": CityCoordinate(latitude: 50.4547, longitude: 30.5238),
@@ -70,7 +67,6 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
 
 
   CityCoordinate selectedCity = null;
-  //
 
   String apiKey = 'd276ce21f21e137bff355f4639e2d02d';
 
@@ -96,24 +92,15 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
 
     if (this._shouldClose == true) {
       _IsSearching = false;
-      //_shouldClose = false;
       _searchText = "";
     }
     else {
       this._shouldClose = false;
       _searchQuery.addListener(() {
-//      if (_searchQuery.text.isEmpty) {
-//        setState(() {
-//          _IsSearching = false;
-//          _searchText = "";
-//        });
-//      }
-//      else {
         setState(() {
           _IsSearching = true;
           _searchText = _searchQuery.text;
         });
-        //    }
       });
     }
   }
@@ -122,23 +109,6 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
     controller.dispose();
     super.dispose();
   }
-
-//  if (_searchText.isEmpty) {
-//  return _list.map((contact) => new ListChildItem(contact))
-//      .toList();
-//  }
-//  else {
-//  List<String> _searchList = List();
-//  for (int i = 0; i < _list.length; i++) {
-//  String  name = _list.elementAt(i);
-//  if (name.toLowerCase().contains(_searchText.toLowerCase())) {
-//  _searchList.add(name);
-//  }
-//  }
-//
-//  return _searchList.map((contact) => new ListChildItem(contact))
-//      .toList();
-//  }
 
   @override
   Widget build(BuildContext context) {
@@ -152,7 +122,7 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
           appBar: buildBar(context),
           body: _IsSearching && !_shouldClose ?
           ListView.builder(
-              itemCount: 3,//_searchList.length == 0 ? 3 : searchCount,
+              itemCount: 3,
               padding: const EdgeInsets.all(15.0),
               itemBuilder: (context, position) {
                 if (_searchText.isEmpty) {
@@ -208,13 +178,7 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
                   );
                 }
               }
-
-      )
-//          new ListView(
-//            padding: new EdgeInsets.symmetric(vertical: 8.0),
-//            children: _buildSearchList(),
-//          )
-              : Center(
+      ) : Center(
               child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
@@ -250,9 +214,6 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
   }
 
   void _onTapItem(BuildContext context, String name) {
-    String ggg = name;
-    print(ggg);
-
     selectedCity = cities[name];
 
     _handleSearchEnd();
@@ -314,27 +275,6 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
     setState(() {
       isLoading = false;
     });
-  }
-
-
-  // List actions
-  List<ListChildItem> _buildSearchList() {
-    if (_searchText.isEmpty) {
-      return _list.map((contact) => new ListChildItem(contact))
-          .toList();
-    }
-    else {
-      List<String> _searchList = List();
-      for (int i = 0; i < _list.length; i++) {
-        String  name = _list.elementAt(i);
-        if (name.toLowerCase().contains(_searchText.toLowerCase())) {
-          _searchList.add(name);
-        }
-      }
-
-      return _searchList.map((contact) => new ListChildItem(contact))
-          .toList();
-    }
   }
 
   // SearchBar
