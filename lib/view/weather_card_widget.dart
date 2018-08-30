@@ -3,11 +3,21 @@ import 'package:flutter_weather/model/weather_data.dart';
 
 import 'package:intl/intl.dart';
 
-class WeatherCardWidget extends StatelessWidget {
+
+class WeatherCardWidget extends StatefulWidget {
+
+  const WeatherCardWidget({Key key, this.weather}) : super(key: key);
 
   final WeatherData weather;
 
-  WeatherCardWidget({Key key, @required this.weather}) : super(key: key);
+  @override
+  State<StatefulWidget> createState() {
+    return WeatherCardState();
+  }
+
+}
+
+class WeatherCardState extends State<WeatherCardWidget> {
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +29,10 @@ class WeatherCardWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             FadeInImage.assetNetwork(placeholder: '',
-                image: 'https://openweathermap.org/img/w/${weather.icon}.png'),
-            Text('${weather.main}, ${weather.temp.toInt().toString()}°C', style: new TextStyle(color: Colors.white, fontSize: 30.0)),
-            Text(new DateFormat.yMMMd().format(weather.date), style: new TextStyle(color: Colors.white, fontStyle: FontStyle.italic)),
-            Text(new DateFormat.Hm().format(weather.date), style: new TextStyle(color: Colors.white, fontStyle: FontStyle.italic)),
+                image: 'https://openweathermap.org/img/w/${widget.weather.icon}.png'),
+            Text('${widget.weather.main}, ${widget.weather.temp.toInt().toString()}°C', style: new TextStyle(color: Colors.white, fontSize: 30.0)),
+            Text(new DateFormat.yMMMd().format(widget.weather.date), style: new TextStyle(color: Colors.white, fontStyle: FontStyle.italic)),
+            Text(new DateFormat.Hm().format(widget.weather.date), style: new TextStyle(color: Colors.white, fontStyle: FontStyle.italic)),
           ],
         ),
       ),
