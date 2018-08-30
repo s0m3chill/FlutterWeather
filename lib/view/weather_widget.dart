@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/model/weather_data.dart';
+import 'package:flutter_weather/utils/pivot_transition.dart';
 
 import 'package:intl/intl.dart';
-
-import 'dart:ui';
-import 'dart:math' as math;
 
 class WeatherWidget extends StatefulWidget {
 
@@ -27,13 +25,9 @@ class WeatherWidgetState extends State<WeatherWidget> with TickerProviderStateMi
     _animationController = new AnimationController(
       duration: const Duration(seconds: 3),
       vsync: this,
-    )..repeat();
+    );//..repeat();
 
-//  _animationController = AnimationController(
-//    duration: Duration(seconds: 3),
-//    vsync: this,
-//  );
-//  _animationController.repeat(period: Duration(seconds: 3)).then( (fdsf) => ( _animationController.stop(true) ) );
+    _animationController.forward();
   }
 
   @override dispose() {
@@ -73,40 +67,4 @@ class WeatherWidgetState extends State<WeatherWidget> with TickerProviderStateMi
     );
   }
 
-}
-
-/// Animates the rotation of a widget around a pivot point.
-class PivotTransition extends AnimatedWidget {
-  /// Creates a rotation transition.
-  ///
-  /// The [turns] argument must not be null.
-  PivotTransition({
-    Key key,
-    this.alignment: FractionalOffset.center,
-    @required Animation<double> turns,
-    this.child,
-  }) : super(key: key, listenable: turns);
-
-  /// The animation that controls the rotation of the child.
-  ///
-  /// If the current value of the turns animation is v, the child will be
-  /// rotated v * 2 * pi radians before being painted.
-  Animation<double> get turns => listenable;
-
-  /// The pivot point to rotate around.
-  final FractionalOffset alignment;
-
-  /// The widget below this widget in the tree.
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final double turnsValue = turns.value;
-    final Matrix4 transform = new Matrix4.rotationZ(turnsValue * math.PI * 2.0);
-    return new Transform(
-      transform: transform,
-      alignment: alignment,
-      child: child,
-    );
-  }
 }
