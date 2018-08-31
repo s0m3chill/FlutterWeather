@@ -11,6 +11,7 @@ import 'package:flutter_weather/model/weather_data.dart';
 import 'package:flutter_weather/model/forecast_data.dart';
 import 'package:flutter_weather/model/city_coordinate.dart';
 import 'package:flutter_weather/model/city_datasource.dart';
+import 'package:flutter_weather/weather_details.dart';
 
 void main() => runApp(new FlutterWeather());
 
@@ -157,8 +158,19 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
                           child: _forecastData != null ? ListView.builder(
                               itemCount: _forecastData.list.length,
                               scrollDirection: Axis.vertical,
-                              itemBuilder: (context, index) =>
-                                  WeatherCardWidget(weather: _forecastData.list.elementAt(index))) : Container(),
+                              itemBuilder: (context, index) {
+//                                GestureDetector(
+//                                  child:
+                                  WeatherCardWidget(
+                                      weather: _forecastData.list.elementAt(
+                                          index));
+//                                  onTap: () {
+//                                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => WeatherDetails()));
+//                                  },
+//                                );
+                                
+                              }
+                          ): Container()
                         ),
                       ),
                     )
