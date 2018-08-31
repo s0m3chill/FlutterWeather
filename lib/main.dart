@@ -159,16 +159,15 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
                               itemCount: _forecastData.list.length,
                               scrollDirection: Axis.vertical,
                               itemBuilder: (context, index) {
-//                                GestureDetector(
-//                                  child:
-                                  WeatherCardWidget(
+                                return GestureDetector(
+                                  child:
+                                   WeatherCardWidget(
                                       weather: _forecastData.list.elementAt(
-                                          index));
-//                                  onTap: () {
-//                                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => WeatherDetails()));
-//                                  },
-//                                );
-                                
+                                          index)),
+                                  onTap: () {
+                                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => WeatherDetails()));
+                                  },
+                                );
                               }
                           ): Container()
                         ),
