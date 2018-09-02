@@ -10,6 +10,8 @@ class WeatherDetails extends StatefulWidget {
 class AppState extends State<WeatherDetails> {
   Color caughtColor = Colors.grey;
 
+  DragBox drag = DragBox(Offset(0.0, 0.0), 'Some annoying AD', Colors.blueAccent);
+
   @override
   Widget build(BuildContext context) {
   // Presentation: Scaffold distorts position
@@ -18,15 +20,13 @@ class AppState extends State<WeatherDetails> {
 //      body:
       return Stack(
         children: <Widget>[
-          DragBox(Offset(0.0, 0.0), 'Box One', Colors.blueAccent),
-          DragBox(Offset(200.0, 0.0), 'Box Two', Colors.orange),
-          DragBox(Offset(300.0, 0.0), 'Box Three', Colors.lightGreen),
+          drag,
           Positioned(
             left: 100.0,
             bottom: 0.0,
             child: DragTarget(
-              onAccept: (Color color) {
-                caughtColor = color;
+              onAccept: (Color col) {
+
               },
               builder: (
                   BuildContext context,
@@ -38,9 +38,6 @@ class AppState extends State<WeatherDetails> {
                   height: 200.0,
                   decoration: BoxDecoration(
                     color: accepted.isEmpty ? caughtColor : Colors.grey.shade200,
-                  ),
-                  child: Center(
-                    child: Text("Drag Here!"),
                   ),
                 );
               },
