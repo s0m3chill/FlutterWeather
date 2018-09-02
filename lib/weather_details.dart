@@ -8,7 +8,7 @@ class WeatherDetails extends StatefulWidget {
 }
 
 class AppState extends State<WeatherDetails> {
-  Color caughtColor = Colors.grey;
+  double totalWidth = 0.0;
 
   DragBox drag = DragBox(Offset(0.0, 0.0), 'Some annoying AD', Colors.blueAccent);
 
@@ -22,11 +22,11 @@ class AppState extends State<WeatherDetails> {
         children: <Widget>[
           drag,
           Positioned(
-            left: 100.0,
+            left: 0.0,
             bottom: 0.0,
             child: DragTarget(
               onAccept: (Color col) {
-
+                  totalWidth += 30.0;
               },
               builder: (
                   BuildContext context,
@@ -34,10 +34,10 @@ class AppState extends State<WeatherDetails> {
                   List<dynamic> rejected,
                   ) {
                 return Container(
-                  width: 200.0,
+                  width: 200.0 + totalWidth,
                   height: 200.0,
                   decoration: BoxDecoration(
-                    color: accepted.isEmpty ? caughtColor : Colors.grey.shade200,
+                    color: Colors.black,
                   ),
                 );
               },
