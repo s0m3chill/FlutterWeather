@@ -15,10 +15,10 @@ class AppState extends State<WeatherDetails> {
   @override
   Widget build(BuildContext context) {
   // Presentation: Scaffold distorts position
-//    return Scaffold(
-//      appBar: AppBar(title: new Text("Flutter Weather", style: new TextStyle(color: Colors.white)),),
-//      body:
-      return Stack(
+    return Scaffold(
+      appBar: AppBar(title: new Text("Flutter Weather", style: new TextStyle(color: Colors.white)),),
+      body:
+       Stack(
         children: <Widget>[
           drag,
           Positioned(
@@ -45,8 +45,8 @@ class AppState extends State<WeatherDetails> {
           )
         ],
       //)
+    ),
     );
-
   }
 }
 

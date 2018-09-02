@@ -45,7 +45,8 @@ class DragBoxState extends State<DragBox> {
           ),
           onDraggableCanceled: (velocity, offset) {
             setState(() {
-              position = offset;
+              Offset adjusted = Offset(offset.dx, offset.dy - 64.0);
+              position = adjusted;
             });
           },
           feedback: Container(
