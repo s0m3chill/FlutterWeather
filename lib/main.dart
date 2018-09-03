@@ -12,6 +12,7 @@ import 'package:flutter_weather/model/forecast_data.dart';
 import 'package:flutter_weather/model/city_coordinate.dart';
 import 'package:flutter_weather/model/city_datasource.dart';
 import 'package:flutter_weather/weather_details.dart';
+import 'package:flutter_weather/utils/screen_transition.dart';
 
 void main() => runApp(new FlutterWeather());
 
@@ -165,7 +166,11 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
                                       weather: _forecastData.list.elementAt(
                                           index)),
                                   onTap: () {
-                                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => WeatherDetails()));
+                                    //Navigator.of(context).push(MaterialPageRoute(builder: (context) => WeatherDetails()));
+                                    Navigator.push(
+                                      context,
+                                      ScaleRoute(widget: WeatherDetails()),
+                                    );
                                   },
                                 );
                               }
