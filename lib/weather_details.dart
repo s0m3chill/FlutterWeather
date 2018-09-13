@@ -1,14 +1,22 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/view/drag_item.dart';
+import 'package:flutter_weather/model/weather_data.dart';
 
 class WeatherDetails extends StatefulWidget {
+
+  WeatherData weather;
+
+  WeatherDetails({Key key, @required this.weather}) : super(key: key);
+
   @override
   AppState createState() => AppState();
 }
 
 class AppState extends State<WeatherDetails> {
-  double totalWidth = 0.0;
+  double widthDifference = 0.0;
+  bool shouldShowHiddenInfo = false;
+  final containerDimension = 200.0;
 
   DragBox drag = DragBox(Offset(0.0, 0.0), 'Some annoying AD', Colors.blueAccent);
 
@@ -26,23 +34,41 @@ class AppState extends State<WeatherDetails> {
             bottom: 0.0,
             child: DragTarget(
               onAccept: (Color col) {
-                  totalWidth += 30.0;
+                  widthDifference += 50.0;
+                  if (widthDifference >= containerDimension) {
+                    shouldShowHiddenInfo = true;
+                  }
               },
               builder: (
                   BuildContext context,
                   List<dynamic> accepted,
                   List<dynamic> rejected,
                   ) {
-                return Container(
-                  width: 200.0 + totalWidth,
-                  height: 200.0,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                  ),
+                return Column(
+                  children: <Widget>[
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 50.0,
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Opacity(opacity: shouldShowHiddenInfo ? 1.0 : 0.0,
+                        child: Text('The weather is: ${widget.weather.main}'))
+                      ),
+                    ),
+
+                    Container(
+                      width: containerDimension + widthDifference,
+                      height: containerDimension,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                      ),
+                    ),
+
+                  ],
                 );
               },
             ),
-          )
+          ),
         ],
       //)
     ),

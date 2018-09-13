@@ -169,7 +169,7 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
                                     //Navigator.of(context).push(MaterialPageRoute(builder: (context) => WeatherDetails()));
                                     Navigator.push(
                                       context,
-                                      ScaleRoute(widget: WeatherDetails()),
+                                      ScaleRoute(widget: WeatherDetails(weather: _forecastData.list.elementAt(index))),
                                     );
                                   },
                                 );
