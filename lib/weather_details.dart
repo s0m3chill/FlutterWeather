@@ -16,7 +16,7 @@ class WeatherDetails extends StatefulWidget {
 class AppState extends State<WeatherDetails> {
   double widthDifference = 0.0;
   bool shouldShowHiddenInfo = false;
-  final containerDimension = 200.0;
+  final widthStep = 100.0;
 
   DragBox drag = DragBox(Offset(0.0, 0.0), 'Some annoying AD', Colors.blueAccent);
 
@@ -34,8 +34,8 @@ class AppState extends State<WeatherDetails> {
             bottom: 0.0,
             child: DragTarget(
               onAccept: (Color col) {
-                  widthDifference += 50.0;
-                  if (widthDifference >= containerDimension) {
+                  widthDifference += widthStep;
+                  if (widthDifference >= widthStep * 3) {
                     shouldShowHiddenInfo = true;
                   }
               },
@@ -58,8 +58,8 @@ class AppState extends State<WeatherDetails> {
                     Opacity(
                       opacity: shouldShowHiddenInfo ? 0.0 : 1.0,
                       child: Container(
-                        width: containerDimension + widthDifference,
-                        height: containerDimension,
+                        width: MediaQuery.of(context).size.width - widthDifference,
+                        height: 200.0,
                         decoration: BoxDecoration(
                           color: Colors.black,
                         ),
