@@ -55,15 +55,16 @@ class AppState extends State<WeatherDetails> {
                         child: Text('The weather is: ${widget.weather.main}'))
                       ),
                     ),
-
-                    Container(
-                      width: containerDimension + widthDifference,
-                      height: containerDimension,
-                      decoration: BoxDecoration(
-                        color: Colors.black,
+                    Opacity(
+                      opacity: shouldShowHiddenInfo ? 0.0 : 1.0,
+                      child: Container(
+                        width: containerDimension + widthDifference,
+                        height: containerDimension,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-
+                    )
                   ],
                 );
               },
