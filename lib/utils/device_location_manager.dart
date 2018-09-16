@@ -15,8 +15,6 @@ class DeviceLocationManager {
 //
 //    IosDeviceInfo iOSInfo = await deviceInfo.iosInfo;
 //    //AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-//
-//    bool isPhysicalDevice = iOSInfo.isPhysicalDevice;// || androidInfo.isPhysicalDevice;
 
       try {
         locationDict = await _location.getLocation().timeout(const Duration (seconds: 2), onTimeout : () => _onUnknownLocation());

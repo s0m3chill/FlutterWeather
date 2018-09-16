@@ -9,6 +9,7 @@ class ForecastData {
   factory ForecastData.fromJson(Map<String, dynamic> json) {
     List list = new List();
 
+    // json values can be any type
     for (dynamic e in json['list']) {
       WeatherData w = new WeatherData(
           date: new DateTime.fromMillisecondsSinceEpoch(e['dt'] * 1000, isUtc: false),

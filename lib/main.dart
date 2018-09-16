@@ -145,7 +145,7 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(8.0),
                             child: _weatherData != null ? WeatherWidget(weather: _weatherData) : Container(),
                           ),
                         ],
@@ -155,7 +155,8 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
-                          height: _animation.value,
+                          // DEMO:
+                          height: 350.0,//_animation.value,
                           child: _forecastData != null ? ListView.builder(
                               itemCount: _forecastData.list.length,
                               scrollDirection: Axis.vertical,
@@ -166,11 +167,12 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
                                       weather: _forecastData.list.elementAt(
                                           index)),
                                   onTap: () {
-                                    //Navigator.of(context).push(MaterialPageRoute(builder: (context) => WeatherDetails()));
-                                    Navigator.push(
-                                      context,
-                                      ScaleRoute(widget: WeatherDetails(weather: _forecastData.list.elementAt(index))),
-                                    );
+                                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => WeatherDetails(weather: _forecastData.list.elementAt(index))));
+                                    // DEMO:
+//                                    Navigator.push(
+//                                      context,
+//                                      ScaleRoute(widget: WeatherDetails(weather: _forecastData.list.elementAt(index))),
+//                                    );
                                   },
                                 );
                               }
@@ -249,24 +251,24 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
 
   // MARK: - SearchBar
   Widget buildBar(BuildContext context) {
-    return new AppBar(
+    return AppBar(
         centerTitle: true,
         title: _appBarTitle,
         actions: <Widget>[
           new IconButton(icon: _actionIcon, onPressed: () {
             setState(() {
               if (_actionIcon.icon == Icons.search) {
-                _actionIcon = new Icon(Icons.close, color: Colors.white,);
-                _appBarTitle = new TextField(
+                _actionIcon = Icon(Icons.close, color: Colors.white,);
+                _appBarTitle = TextField(
                   controller: _searchQuery,
-                  style: new TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
 
                   ),
-                  decoration: new InputDecoration(
-                      prefixIcon: new Icon(Icons.search, color: Colors.white),
+                  decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.search, color: Colors.white),
                       hintText: "Search...",
-                      hintStyle: new TextStyle(color: Colors.white)
+                      hintStyle: TextStyle(color: Colors.white)
                   ),
                 );
                 _handleSearchStart();
@@ -290,7 +292,7 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
   void _handleSearchEnd() {
     setState(() {
       _isCitiesVisible = true;
-      _actionIcon = new Icon(Icons.search, color: Colors.white);
+      _actionIcon = Icon(Icons.search, color: Colors.white);
       _appBarTitle = _defaultAppBar;
       _isSearching = false;
       _searchQuery.clear();

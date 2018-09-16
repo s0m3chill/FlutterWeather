@@ -30,9 +30,9 @@ class WeatherCardState extends State<WeatherCardWidget> {
           children: <Widget>[
             FadeInImage.assetNetwork(placeholder: '',
                 image: 'https://openweathermap.org/img/w/${widget.weather.icon}.png'),
-            Text('${widget.weather.main}, ${widget.weather.temp.toInt().toString()}°C', style: new TextStyle(color: Colors.white, fontSize: 30.0)),
-            Text(new DateFormat.yMMMd().format(widget.weather.date), style: new TextStyle(color: Colors.white, fontStyle: FontStyle.italic)),
-            Text(new DateFormat.Hm().format(widget.weather.date), style: new TextStyle(color: Colors.white, fontStyle: FontStyle.italic)),
+            Text('${widget.weather.main}, ${widget.weather.temp.toInt().toString()}°C', style: TextStyle(color: Colors.white, fontSize: 30.0)),
+            Text(DateFormat.yMMMd().format(widget.weather.date), style: TextStyle(color: Colors.white, fontStyle: FontStyle.italic)),
+            Text(DateFormat.Hm().format(widget.weather.date), style: TextStyle(color: Colors.white, fontStyle: FontStyle.italic)),
           ],
         ),
       ),

@@ -29,47 +29,47 @@ class AppState extends State<WeatherDetails> {
        Stack(
         children: <Widget>[
           drag,
-          Positioned(
-            left: 0.0,
-            bottom: 0.0,
-            child: DragTarget(
-              onAccept: (Color col) {
-                  widthDifference += widthStep;
-                  if (widthDifference >= widthStep * 3) {
-                    shouldShowHiddenInfo = true;
-                  }
-              },
-              builder: (
-                  BuildContext context,
-                  List<dynamic> accepted,
-                  List<dynamic> rejected,
-                  ) {
-                return Column(
-                  children: <Widget>[
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 50.0,
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Opacity(opacity: shouldShowHiddenInfo ? 1.0 : 0.0,
-                        child: Text('The weather is: ${widget.weather.main}'))
-                      ),
-                    ),
-                    Opacity(
-                      opacity: shouldShowHiddenInfo ? 0.0 : 1.0,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width - widthDifference,
-                        height: 200.0,
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                        ),
-                      ),
-                    )
-                  ],
-                );
-              },
-            ),
-          ),
+//          Positioned(
+//            left: 0.0,
+//            bottom: 0.0,
+//            child: DragTarget(
+//              onAccept: (Color col) {
+//                  widthDifference += widthStep;
+//                  if (widthDifference >= widthStep * 3) {
+//                    shouldShowHiddenInfo = true;
+//                  }
+//              },
+//              builder: (
+//                  BuildContext context,
+//                  List<dynamic> accepted,
+//                  List<dynamic> rejected,
+//                  ) {
+//                return Column(
+//                  children: <Widget>[
+//                    Container(
+//                      width: MediaQuery.of(context).size.width,
+//                      height: 50.0,
+//                      child: Align(
+//                        alignment: Alignment.center,
+//                        child: Opacity(opacity: shouldShowHiddenInfo ? 1.0 : 0.0,
+//                        child: Text('The weather is: ${widget.weather.main}'))
+//                      ),
+//                    ),
+//                    Opacity(
+//                      opacity: shouldShowHiddenInfo ? 0.0 : 1.0,
+//                      child: Container(
+//                        width: MediaQuery.of(context).size.width - widthDifference,
+//                        height: 200.0,
+//                        decoration: BoxDecoration(
+//                          color: Colors.black,
+//                        ),
+//                      ),
+//                    )
+//                  ],
+//                );
+//              },
+//            ),
+//          ),
         ],
       //)
     ),
