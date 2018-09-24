@@ -46,6 +46,8 @@ class DragBoxState extends State<DragBox> {
           onDraggableCanceled: (velocity, offset) {
             setState(() {
               // DEMO:
+              // STATUS_BAR: flutter_statusbar : ^0.0.1
+              // NAVIGATION_BAR: appBar.preferredSize.height
               Offset adjusted = Offset(offset.dx, offset.dy);// - 64.0);
               position = adjusted;
             });
