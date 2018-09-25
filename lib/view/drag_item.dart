@@ -33,14 +33,7 @@ class DragBoxState extends State<DragBox> {
             height: 100.0,
             color: widget.itemColor,
             child: Center(
-              child: Text(
-                widget.label,
-                style: TextStyle(
-                  color: Colors.white,
-                  decoration: TextDecoration.none,
-                  fontSize: 20.0,
-                ),
-              ),
+              child: Image(image: AssetImage('assets/ad.png'), width: 100.0, height: 100.0)
             ),
           ),
           onDraggableCanceled: (velocity, offset) {
