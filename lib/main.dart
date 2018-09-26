@@ -206,7 +206,7 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
               .toString()}&lon=${lon.toString()}&units=metric');
 
       if (weatherResponse.statusCode == 200 && forecastResponse.statusCode == 200) {
-        return setState(() {
+        setState(() {
           _weatherData =
           new WeatherData.fromJson(jsonDecode(weatherResponse.body));
           _forecastData =
