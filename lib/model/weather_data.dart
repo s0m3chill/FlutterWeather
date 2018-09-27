@@ -6,11 +6,11 @@ class WeatherApi {
 
 class WeatherData {
 
-  final DateTime date;
-  final String name;
-  final double temp;
-  final String main;
-  final String icon;
+  DateTime date;
+  String name;
+  double temp;
+  String main;
+  String icon;
 
   WeatherData({this.date, this.name, this.temp, this.main, this.icon});
 
