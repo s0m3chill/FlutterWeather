@@ -88,6 +88,11 @@ class FlutterWeatherState extends State<FlutterWeather> with SingleTickerProvide
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+//      ThemeData(
+//          primaryColor:
+//          Theme.of(context).platform == TargetPlatform.iOS
+//              ? Colors.grey
+//              : Colors.blue),
       home: Scaffold(
           backgroundColor: _shouldShowCities() ? Colors.white : Colors.grey,
           appBar: buildBar(context),
